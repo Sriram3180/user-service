@@ -1,4 +1,4 @@
-package com.ai.knowledgeassistant;
+package com.ai.knowledgeassistant.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

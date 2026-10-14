@@ -1,5 +1,8 @@
 package com.ai.knowledgeassistant.response;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 public class LoginRequest {
     public String getEmail() {
         return email;
@@ -9,7 +12,6 @@ public class LoginRequest {
         this.email = email;
     }
 
-    public String email;
 
     public String getPassword() {
         return password;
@@ -19,6 +21,13 @@ public class LoginRequest {
         this.password = password;
     }
 
-    public String password;
 
+    @NotBlank
+    String name;
+
+    @Email
+    String email;
+
+    @NotBlank
+    String password;
 }

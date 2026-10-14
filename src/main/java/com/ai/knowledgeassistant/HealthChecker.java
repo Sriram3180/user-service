@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthChecker {
     @GetMapping("/health")
     public String helloWorld() {
-    return "Hello World from user-service";
-}
+        return "Hello World from user-service";
+    }
 }

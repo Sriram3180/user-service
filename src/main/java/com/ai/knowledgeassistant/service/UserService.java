@@ -1,10 +1,9 @@
 package com.ai.knowledgeassistant.service;
 
-import com.ai.knowledgeassistant.User;
+import com.ai.knowledgeassistant.entity.User;
 import com.ai.knowledgeassistant.repository.UserRepository;
 import com.ai.knowledgeassistant.response.LoginRequest;
 import com.ai.knowledgeassistant.response.UserRequestDTO;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,8 +15,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JWTService jwtService;
 
-    public String register(UserRequestDTO userRequest){
+    public String register(UserRequestDTO userRequest) {
         if (userRepository.existsByEmail(userRequest.getEmail())) {
             throw new RuntimeException("Already Exists !");
         }
@@ -29,20 +29,13 @@ public class UserService {
         userRepository.save(user);
         return "User Created Successfully";
     }
+
     public String login(LoginRequest loginRequest) {
-        User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() ->new RuntimeException("User not found"));
-        System.out.println("Input Password: " + loginRequest.getPassword());
-        System.out.println("Stored Password: " + user.getPassword());
+        User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
 
-        boolean match = passwordEncoder.matches(
-                loginRequest.getPassword(),
-                user.getPassword());
-
-        System.out.println("Password Match: " + match);
-
-        if(!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new RuntimeException("Wrong password");
         }
-        return "Login Successful";
+        return jwtService.generateToken(loginRequest.getEmail());
     }
 }
