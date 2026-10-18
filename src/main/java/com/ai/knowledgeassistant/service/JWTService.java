@@ -10,17 +10,14 @@ import java.util.Date;
 
 @Service
 public class JWTService {
-    private static final String SECRET_KEY =
-            "1a2b3c4d5e6g7h8i9j0klmnopqrstuvw";
+    private static final String SECRET_KEY = "1a2b3c4d5e6g7h8i9j0klmnopqrstuvw";
 
     public String generateToken(String email) {
-        return Jwts.builder().subject(email).issuedAt(new Date()).expiration(new Date(System.currentTimeMillis()
-                + 1000 * 60 * 60)).signWith(getSignInKey()).toString();
+        return Jwts.builder().subject(email).issuedAt(new Date()).expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)).signWith(getSignInKey()).toString();
     }
 
     private Key getSignInKey() {
-        return Keys.hmacShaKeyFor(
-                SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
 }

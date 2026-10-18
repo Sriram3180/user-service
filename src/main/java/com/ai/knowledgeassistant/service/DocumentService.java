@@ -24,12 +24,8 @@ public class DocumentService {
 
     private final DocumentRepository documentRepository;
 
-    private final String UPLOAD_DIR = "uploads/";
-
-    public String uploadFile(MultipartFile file)
-            throws IOException {
-
-        Path uploadPath = Paths.get(UPLOAD_DIR);
+    public String uploadFile(MultipartFile file) throws IOException {
+        Path uploadPath = Paths.get("uploads/");
 
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
@@ -39,21 +35,11 @@ public class DocumentService {
         if (Objects.nonNull(fileName)) {
             Path filePath = uploadPath.resolve(fileName);
 
-            Files.copy(
-                    file.getInputStream(),
-                    filePath,
-                    StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
             String extractedText = extractText(filePath);
 
-            Document document = Document.builder()
-                    .fileName(fileName)
-                    .filePath(filePath.toString())
-                    .content(extractedText)
-                    .contentType(file.getContentType())
-                    .fileSize(file.getSize())
-                    .uploadedAt(LocalDateTime.now())
-                    .build();
+            Document document = Document.builder().fileName(fileName).filePath(filePath.toString()).content(extractedText).contentType(file.getContentType()).fileSize(file.getSize()).uploadedAt(LocalDateTime.now()).build();
 
             documentRepository.save(document);
 
@@ -68,19 +54,15 @@ public class DocumentService {
 
     public String getContent(Long id) {
 
-        return documentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Document not found"))
-                .getContent();
+        return documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found")).getContent();
     }
 
 
     private String extractText(Path filePath) throws IOException {
 
-        try (PDDocument document =
-                     Loader.loadPDF(filePath.toFile())) {
+        try (PDDocument document = Loader.loadPDF(filePath.toFile())) {
 
-            PDFTextStripper pdfTextStripper =
-                    new PDFTextStripper();
+            PDFTextStripper pdfTextStripper = new PDFTextStripper();
 
             return pdfTextStripper.getText(document);
         }

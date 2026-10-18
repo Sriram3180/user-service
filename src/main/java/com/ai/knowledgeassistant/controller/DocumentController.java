@@ -1,7 +1,6 @@
 package com.ai.knowledgeassistant.controller;
 
 import com.ai.knowledgeassistant.entity.Document;
-import com.ai.knowledgeassistant.service.AIService;
 import com.ai.knowledgeassistant.service.DocumentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +16,6 @@ import java.util.List;
 public class DocumentController {
 
     private final DocumentService documentService;
-    private final AIService aiService;
-
 
     @PostMapping("/upload")
     public ResponseEntity<String> upload(
@@ -39,15 +36,5 @@ public class DocumentController {
     public String getContent(@PathVariable Long id) {
 
         return documentService.getContent(id);
-    }
-
-    @GetMapping("/{id}/summary")
-    public String summarizeDocument(
-            @PathVariable Long id) {
-
-
-
-        return aiService.summarize(
-                id);
     }
 }

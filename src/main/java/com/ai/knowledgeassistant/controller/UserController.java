@@ -1,7 +1,7 @@
 package com.ai.knowledgeassistant.controller;
 
 import com.ai.knowledgeassistant.response.LoginRequest;
-import com.ai.knowledgeassistant.response.UserRequestDTO;
+import com.ai.knowledgeassistant.response.UserRequest;
 import com.ai.knowledgeassistant.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ public class UserController {
     private final UserService service;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserRequestDTO userRequest) {
+    public ResponseEntity<String> registerUser(@RequestBody UserRequest userRequest) {
         return ResponseEntity.ok(service.register(userRequest));
     }
 

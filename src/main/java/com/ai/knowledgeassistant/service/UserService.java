@@ -3,7 +3,7 @@ package com.ai.knowledgeassistant.service;
 import com.ai.knowledgeassistant.entity.User;
 import com.ai.knowledgeassistant.repository.UserRepository;
 import com.ai.knowledgeassistant.response.LoginRequest;
-import com.ai.knowledgeassistant.response.UserRequestDTO;
+import com.ai.knowledgeassistant.response.UserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,20 +12,16 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
+    @Autowired
+    private UserRepository userRepository;
 
-    public String register(UserRequestDTO userRequest) {
+    public String register(UserRequest userRequest) {
         if (userRepository.existsByEmail(userRequest.getEmail())) {
             throw new RuntimeException("Already Exists !");
         }
-        User user = User.builder()
-                .name(userRequest.getName())
-                .email(userRequest.getEmail())
-                .password(passwordEncoder.encode(userRequest.getPassword()))
-                .role("USER").build();
+        User user = User.builder().name(userRequest.getName()).email(userRequest.getEmail()).password(passwordEncoder.encode(userRequest.getPassword())).role("USER").build();
         userRepository.save(user);
         return "User Created Successfully";
     }
